@@ -1,0 +1,55 @@
+-e version: 2
+
+
+
+jobs:
+
+  build:
+
+    docker:
+
+      - image: openjdk
+
+        command: [ /bin/sh ]
+
+
+
+    working_directory: /content-caching
+
+
+
+    steps:
+
+      - checkout
+
+      - restore_cache:
+
+          keys:
+
+            - content-caching-{{ .Branch }}-{{ checksum "pom.xml" }}
+
+            - content-caching-master-{{ checksum "pom.xml" }}
+
+            - content-caching-{{ .Branch }}
+
+            - content-caching
+
+      - run:
+
+          command: |
+
+            ./mvnw -B versions:set -DnewVersion=${CIRCLE_BRANCH}-SNAPSHOT
+
+            ./mvnw -B -s settings.xml -U clean deploy
+
+      - save_cache:
+
+          key: content-caching-{{ .Branch }}-{{ checksum "pom.xml" }}
+
+          paths:
+
+            - ~/.m2
+
+      - store_test_results:
+
+          path: /target/surefire-reports

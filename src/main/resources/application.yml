@@ -1,0 +1,13 @@
+spring:
+  application:
+    name: content-caching
+
+host:
+ url: https://prismic.io
+
+header:
+ charset: UTF-8
+
+data:
+   mongodb:
+     database: test

@@ -1,0 +1,6 @@
+spring:
+  application:
+    name: Content caching live
+
+host:
+    url: localhost:8080
